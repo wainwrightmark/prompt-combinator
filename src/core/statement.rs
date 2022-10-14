@@ -86,7 +86,7 @@ impl Statement<'_> {
                 })
                 .collect_vec();
 
-            return Ok(Either::Left(result));
+            Ok(Either::Left(result))
         } else {
             //No more permutations
             let (literals, failures): (Vec<Cow<str>>, Vec<anyhow::Error>) = self
@@ -102,7 +102,7 @@ impl Statement<'_> {
                 .partition_result();
 
             if failures.is_empty() {
-                return Ok(Either::Right(literals.iter().map(|x|x) .join("")));
+                return Ok(Either::Right(literals.iter().join("")));
             } else {
                 bail!(failures.into_iter().map(|x| x.to_string()).join("; "))
             }
@@ -118,11 +118,20 @@ mod tests {
 
     #[test_case("abc", "abc")]
     #[test_case("{cat|dog}", "cat\ndog")]
-    #[test_case("{cat|dog} and {red|blue}", "cat and red\ncat and blue\ndog and red\ndog and blue")]
-    #[test_case("{cat|dog} and {1:red|blue}", "cat and red\ncat and blue\ndog and red\ndog and blue")]
+    #[test_case(
+        "{cat|dog} and {red|blue}",
+        "cat and red\ncat and blue\ndog and red\ndog and blue"
+    )]
+    #[test_case(
+        "{cat|dog} and {1:red|blue}",
+        "cat and red\ncat and blue\ndog and red\ndog and blue"
+    )]
     #[test_case("{1;3;1}", "1\n2\n3")]
     #[test_case("a {<i>}{1:<i>:cat|dog}!", "a cat\na dog")]
-    #[test_case("a (red: {0.0;1.0;0.3} ) cat", "a (red: 0.0 ) cat\na (red: 0.3 ) cat\na (red: 0.6 ) cat\na (red: 0.9 ) cat")]
+    #[test_case(
+        "a (red: {0.0;1.0;0.3} ) cat",
+        "a (red: 0.0 ) cat\na (red: 0.3 ) cat\na (red: 0.6 ) cat\na (red: 0.9 ) cat"
+    )]
     fn should_expand_to(input_str: &str, expected: &str) -> Result<(), anyhow::Error> {
         let parsed = parse_prompt(input_str)?;
 

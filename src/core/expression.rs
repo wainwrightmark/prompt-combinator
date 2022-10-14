@@ -1,9 +1,8 @@
-use std::{fmt::Display, path::Iter, borrow::Cow};
+use std::{borrow::Cow, fmt::Display, path::Iter};
 
 use itertools::Itertools;
-use num::{ToPrimitive, iter::Range};
+use num::{iter::Range, ToPrimitive};
 use rust_decimal::Decimal;
-
 
 #[derive(Clone, Eq, PartialEq, Debug)]
 pub enum Expression<'a> {
@@ -35,17 +34,17 @@ impl Display for Permutation<'_> {
         let mut sb = "{".to_string();
         if let Some(o) = self.ordering {
             sb.push_str(o.to_string().as_str());
-            sb.push_str(":");
+            sb.push(':');
         }
         if let Some(vn) = self.var_name {
-            sb.push_str("<");
+            sb.push('<');
             sb.push_str(vn.0);
             sb.push_str(">:");
         }
         sb.push_str(self.iterable.to_string().as_str());
-        sb.push_str("}");
+        sb.push('}');
         if self.hidden {
-            sb.push_str("!");
+            sb.push('!');
         }
 
         write!(f, "{}", sb)
@@ -72,9 +71,10 @@ pub enum PermutationIterable<'a> {
 }
 
 impl<'a> PermutationIterable<'a> {
-    pub fn collect_vec(&self) -> Vec<Cow<'a, str>> { //TODO - use an iterator, do not allocate
-        match self{
-            PermutationIterable::Disjunction(d) => d.into_iter().map(|&x|x.into()).collect_vec(),
+    pub fn collect_vec(&self) -> Vec<Cow<'a, str>> {
+        //TODO - use an iterator, do not allocate
+        match self {
+            PermutationIterable::Disjunction(d) => d.iter().map(|&x| x.into()).collect_vec(),
             PermutationIterable::Range { start, end, step } => {
                 debug_assert_eq!((end - start).is_sign_positive(), step.is_sign_positive());
                 debug_assert!(!step.is_zero());
@@ -84,12 +84,11 @@ impl<'a> PermutationIterable<'a> {
                 let mut c = *start;
                 while c <= *end {
                     vec.push(c.to_string().into());
-                    c+= *step;
+                    c += *step;
                 }
-                
 
                 vec
-            },
+            }
         }
     }
 }

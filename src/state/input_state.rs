@@ -8,13 +8,13 @@ use std::default;
 use std::rc::Rc;
 use yewdux::prelude::*;
 
-#[derive(PartialEq, Store, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Store, Clone, Serialize, Deserialize)]
 #[store(storage = "local")] // can also be "session"
 pub struct SavedPromptsState {
     pub prompts: BTreeMap<String, String>,
 }
 
-pub const EXAMPLES: [(&'static str, &'static str); 3] = [
+pub const EXAMPLES: [(&str, &str); 3] = [
     ("Disjunction Example", "a {black|brown} {cat|dog}"),
     ("Range Example", "a (red:{0.0;1.0;0.1}) cat"),
     (
@@ -35,7 +35,7 @@ impl Default for SavedPromptsState {
     }
 }
 
-#[derive(PartialEq, Store, Clone, Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Store, Clone, Serialize, Deserialize)]
 #[store(storage = "local")] // can also be "session"
 pub struct InputState {
     pub name: String,
@@ -86,10 +86,10 @@ impl InputState {
 
             match statement_result {
                 Ok(statement) => match statement.fully_expand() {
-                    Ok(output) =>{
+                    Ok(output) => {
                         self.output = output.into();
                         self.error = None;
-                    } ,
+                    }
                     Err(error) => self.error = Some(error.to_string()),
                 },
                 Err(error) => self.error = Some(error.to_string()),

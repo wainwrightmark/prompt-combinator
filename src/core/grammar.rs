@@ -50,16 +50,16 @@ impl PromptParser {
                 Rule::permutation_inner => {
                     let pi = PromptParser::permutation_inner(child)?;
                     iterable_option = Some(pi);
-                },
-                Rule::var_assign =>{
+                }
+                Rule::var_assign => {
                     let va = PromptParser::var_assign(child)?;
                     var_name = Some(va);
-                },
+                }
                 Rule::ordering => {
                     let o = PromptParser::ordering(child)?;
                     ordering = Some(o);
-                },
-                _=> unreachable!()
+                }
+                _ => unreachable!(),
             }
         }
 
@@ -113,11 +113,11 @@ impl PromptParser {
             .map(|x| x.parse::<Decimal>().unwrap())
             .collect_tuple()
         {
-            if step.is_zero(){
+            if step.is_zero() {
                 return Err(input.error("Step cannot be zero"));
             }
 
-            if (end - start).is_sign_positive() != step.is_sign_positive(){
+            if (end - start).is_sign_positive() != step.is_sign_positive() {
                 return Err(input.error("Step has the wrong sign"));
             }
 
@@ -148,7 +148,7 @@ impl PromptParser {
     }
 }
 
-pub fn parse_prompt<'a>(input_str: &'a str) -> Result<Statement<'a>> {
+pub fn parse_prompt(input_str: &str) -> Result<Statement> {
     // Parse the input into `Nodes`
     let inputs = PromptParser::parse(Rule::file, input_str)?;
     // There should be a single root node in the parsed tree
@@ -166,13 +166,11 @@ mod tests {
     #[test_case("{1:<i>:cat|dog|fish}!")]
     #[test_case("abc")]
     #[test_case("{cat|dog}")]
-    #[test_case("{1;2;3}")]    
+    #[test_case("{1;2;3}")]
     #[test_case("{<i>} and {1:<i>:cat|dog|fish}!")]
     #[test_case("a (red:{0.0;1.0;0.1}) cat")]
     fn should_parse_and_round_trip(input_str: &str) -> Result<()> {
         let parsed = parse_prompt(input_str)?;
-
-        
 
         assert_eq!(input_str, parsed.to_string());
 
