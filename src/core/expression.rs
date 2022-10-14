@@ -37,9 +37,8 @@ impl Display for Permutation<'_> {
             sb.push(':');
         }
         if let Some(vn) = self.var_name {
-            sb.push('<');
             sb.push_str(vn.0);
-            sb.push_str(">:");
+            sb.push_str(":");
         }
         sb.push_str(self.iterable.to_string().as_str());
         sb.push('}');
@@ -56,7 +55,7 @@ pub struct VariableName<'a>(pub &'a str);
 
 impl Display for VariableName<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "<{}>", self.0)
+        write!(f, "{}", self.0)
     }
 }
 

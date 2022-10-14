@@ -90,9 +90,9 @@ impl PromptParser {
 
     fn var_name(input: Node) -> Result<VariableName> {
         let str = input.as_str();
-        let trimmed = &str[1..str.len() - 1]; //This works because the string is ascii
+        //let trimmed = &str[1..str.len() - 1]; //This works because the string is ascii
 
-        Ok(VariableName(trimmed))
+        Ok(VariableName(str))
     }
 
     fn var_use(input: Node) -> Result<Expression> {
@@ -163,11 +163,11 @@ mod tests {
     use super::*;
     use ntest::test_case;
 
-    #[test_case("{1:<i>:cat|dog|fish}!")]
+    #[test_case("{1:i:cat|dog|fish}!")]
     #[test_case("abc")]
     #[test_case("{cat|dog}")]
     #[test_case("{1;2;3}")]
-    #[test_case("{<i>} and {1:<i>:cat|dog|fish}!")]
+    #[test_case("{i} and {1:i:cat|dog|fish}!")]
     #[test_case("a (red:{0.0;1.0;0.1}) cat")]
     fn should_parse_and_round_trip(input_str: &str) -> Result<()> {
         let parsed = parse_prompt(input_str)?;

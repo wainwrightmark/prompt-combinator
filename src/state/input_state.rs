@@ -19,7 +19,7 @@ pub const EXAMPLES: [(&str, &str); 3] = [
     ("Range Example", "a (red:{0.0;1.0;0.1}) cat"),
     (
         "Variables Example",
-        "{<animal>:cat|dog}! a {<animal>} with another {<animal>}",
+        "{animal:cat|dog}! a {animal} with another {animal}",
     ),
 ];
 
@@ -81,7 +81,6 @@ impl InputState {
         if self.text != new_text {
             self.text = new_text.clone();
             //Do not change output - it's annoying
-            //self.output = Default::default();
             let statement_result = parse_prompt(new_text.as_str());
 
             match statement_result {
@@ -95,5 +94,21 @@ impl InputState {
                 Err(error) => self.error = Some(error.to_string()),
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    #[test]
+    fn check_examples_parse_and_round_trip() -> Result<(), pest_consume::Error<Rule>> {
+        for (_, example) in EXAMPLES {
+            let parsed = parse_prompt(example)?;
+
+            assert_eq!(example, parsed.to_string());
+        }
+        Ok(())
     }
 }

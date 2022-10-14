@@ -66,7 +66,7 @@ impl Statement<'_> {
 
             let values_vec = perm.iterable.collect_vec();
 
-            let result = values_vec
+            let result: Result<Vec<Statement>, _> = values_vec
                 .into_iter()
                 .map(|new_value| {
                     let mut new_expressions = self.0.clone();
@@ -77,16 +77,20 @@ impl Statement<'_> {
                     }
 
                     if perm.hidden {
+                        if variable_indices.is_empty(){
+                            bail!("Hidden variable is not used")
+                        }
+
                         new_expressions.remove(perm_index);
                     } else {
                         new_expressions[perm_index] = Expression::Literal(new_value);
                     }
-
-                    Statement(new_expressions)
+                    Ok(Statement(new_expressions))
+                    
                 })
-                .collect_vec();
+                .collect();
 
-            Ok(Either::Left(result))
+            Ok(Either::Left(result?))
         } else {
             //No more permutations
             let (literals, failures): (Vec<Cow<str>>, Vec<anyhow::Error>) = self
@@ -127,10 +131,10 @@ mod tests {
         "cat and red\ncat and blue\ndog and red\ndog and blue"
     )]
     #[test_case("{1;3;1}", "1\n2\n3")]
-    #[test_case("a {<i>}{1:<i>:cat|dog}!", "a cat\na dog")]
+    #[test_case("a {i}{1:i:cat|dog}!", "a cat\na dog")]
     #[test_case(
-        "a (red: {0.0;1.0;0.3} ) cat",
-        "a (red: 0.0 ) cat\na (red: 0.3 ) cat\na (red: 0.6 ) cat\na (red: 0.9 ) cat"
+        "a (red:{0.0;1.0;0.3}) cat",
+        "a (red:0.0) cat\na (red:0.3) cat\na (red:0.6) cat\na (red:0.9) cat"
     )]
     fn should_expand_to(input_str: &str, expected: &str) -> Result<(), anyhow::Error> {
         let parsed = parse_prompt(input_str)?;
