@@ -639,7 +639,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('prompt-combinator-fcd7cd5ecd4ee228_bg.wasm', import.meta.url);
+        input = new URL('prompt-combinator-9938a2d5cd758707_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
