@@ -1,0 +1,14 @@
+.input-textarea{
+    width: 100%;
+}
+
+.display-iframe{
+    height: 300px;
+    width: 300px;
+    margin: auto;
+}
+
+.slider{
+    display: flex;
+    margin: auto;
+}

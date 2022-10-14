@@ -1,0 +1,44 @@
+[package]
+name = "prompt-combinator"
+version = "0.1.0"
+authors = ["Mark Wainwright <wainwrightml@gmail.com>"]
+license = "MIT"
+keywords = ["ai", "art", "language"]
+edition= "2021"
+
+[dependencies]
+itertools = "0.10"
+num = "0.4"
+serde = { version = "1", features = ["derive", "rc"] }
+pest = "2"
+pest_derive = "2"
+yew = { git = "https://github.com/yewstack/yew.git", features = ["csr",] }
+yewdux = { git = "https://github.com/intendednull/yewdux.git" }
+
+wasm-logger = "0.2"
+wasm-bindgen-futures = "0.4"
+wasm-bindgen= { version = "0.2", features = ["serde"] }
+js-sys = "0.3"
+pest_consume = "1.1.3"
+rust_decimal = "1.26.1"
+anyhow = "1.0.65"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "HtmlInputElement","HtmlSelectElement", "HtmlTextAreaElement"
+]
+
+
+
+[profile.release]
+panic = 'abort'
+codegen-units = 1
+lto = true
+opt-level = 3
+
+
+[dev-dependencies]
+bencher= "0.1"
+ntest = "0.8"
+

@@ -1,0 +1,20 @@
+file = {SOI ~ statement ~ EOI}
+COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+
+hidden_marker = {^"!"}
+var_name = {"<" ~ ASCII_ALPHA+ ~ ">"}
+number = {^"-"? ~ ASCII_DIGIT+ ~("." ~ ASCII_DIGIT*)? }
+var_use = {"{" ~ var_name ~ "}"}
+disjunction_inner = {(disjunction_literal ~ "|")* ~ disjunction_literal}
+range_inner = {number+ ~ ";" ~ number+ ~ ";" ~ number+}
+permutation_inner = {range_inner | disjunction_inner}
+permutation = {"{" ~ ordering? ~ var_assign? ~ permutation_inner ~ "}" ~hidden_marker?}
+expression = {var_use | permutation | literal}
+var_assign = {var_name ~ ":"}
+
+ordering = {ASCII_DIGIT+ ~ ":"}
+literal =  {(!"{" ~ ANY)+}
+disjunction_literal = {(!"}" ~ !"|" ~ ANY)+}
+
+statement = { expression* } 
+
