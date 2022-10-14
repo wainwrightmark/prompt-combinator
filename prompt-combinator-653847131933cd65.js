@@ -596,11 +596,11 @@ function getImports() {
         const ret = getObject(arg0).sessionStorage;
         return isLikeNone(ret) ? 0 : addHeapObject(ret);
     }, arguments) };
-    imports.wbg.__wbindgen_closure_wrapper1138 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper1155 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 44, __wbg_adapter_16);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper1885 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper1902 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 44, __wbg_adapter_19);
         return addHeapObject(ret);
     };
@@ -639,7 +639,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('prompt-combinator-9938a2d5cd758707_bg.wasm', import.meta.url);
+        input = new URL('prompt-combinator-653847131933cd65_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
